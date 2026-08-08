@@ -27,6 +27,7 @@ type EGAPHomeProps = {
   onOpenTujuan: () => void;
   onOpenVideoTutorial: () => void;
   onOpenEModul: () => void;
+  onOpenPengendalianKualitas: () => void;
   onLoginOPD: () => void;
 };
 
@@ -61,6 +62,7 @@ const services = [
       'Checklist dan panduan untuk memastikan dokumen GAP telah memenuhi unsur dan kualitas yang dibutuhkan.',
     icon: ClipboardCheck,
     iconClass: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+    action: 'quality',
   },
   {
     title: 'Layanan E-GAP Toolkit',
@@ -78,7 +80,7 @@ const services = [
   },
 ];
 
-export default function EGAPHome({ onBack, onOpenTujuan, onOpenVideoTutorial, onOpenEModul, onLoginOPD }: EGAPHomeProps) {
+export default function EGAPHome({ onBack, onOpenTujuan, onOpenVideoTutorial, onOpenEModul, onOpenPengendalianKualitas, onLoginOPD }: EGAPHomeProps) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased">
       <div className="pointer-events-none fixed inset-0 z-0 bg-grid-pattern opacity-[0.28]" />
@@ -244,13 +246,14 @@ export default function EGAPHome({ onBack, onOpenTujuan, onOpenVideoTutorial, on
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.35, delay: index * 0.04 }}
-                  onClick={service.action === 'tujuan' ? onOpenTujuan : service.action === 'video' ? onOpenVideoTutorial : service.action === 'emodul' ? onOpenEModul : undefined}
+                  onClick={service.action === 'tujuan' ? onOpenTujuan : service.action === 'video' ? onOpenVideoTutorial : service.action === 'emodul' ? onOpenEModul : service.action === 'quality' ? onOpenPengendalianKualitas : undefined}
                   onKeyDown={service.action ? (event) => {
                     if (event.key === 'Enter' || event.key === ' ') {
                       event.preventDefault();
                       if (service.action === 'tujuan') onOpenTujuan();
                       if (service.action === 'video') onOpenVideoTutorial();
                       if (service.action === 'emodul') onOpenEModul();
+                      if (service.action === 'quality') onOpenPengendalianKualitas();
                     }
                   } : undefined}
                   role={service.action ? 'button' : undefined}
