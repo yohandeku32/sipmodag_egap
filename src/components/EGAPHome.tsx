@@ -26,6 +26,7 @@ type EGAPHomeProps = {
   onBack: () => void;
   onOpenTujuan: () => void;
   onOpenVideoTutorial: () => void;
+  onOpenEModul: () => void;
   onLoginOPD: () => void;
 };
 
@@ -52,6 +53,7 @@ const services = [
       'Materi pembelajaran digital sebagai referensi praktis dalam menyusun Gender Analysis Pathway.',
     icon: BookOpen,
     iconClass: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+    action: 'emodul',
   },
   {
     title: 'Pengendalian Kualitas GAP',
@@ -76,7 +78,7 @@ const services = [
   },
 ];
 
-export default function EGAPHome({ onBack, onOpenTujuan, onOpenVideoTutorial, onLoginOPD }: EGAPHomeProps) {
+export default function EGAPHome({ onBack, onOpenTujuan, onOpenVideoTutorial, onOpenEModul, onLoginOPD }: EGAPHomeProps) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased">
       <div className="pointer-events-none fixed inset-0 z-0 bg-grid-pattern opacity-[0.28]" />
@@ -242,12 +244,13 @@ export default function EGAPHome({ onBack, onOpenTujuan, onOpenVideoTutorial, on
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.35, delay: index * 0.04 }}
-                  onClick={service.action === 'tujuan' ? onOpenTujuan : service.action === 'video' ? onOpenVideoTutorial : undefined}
+                  onClick={service.action === 'tujuan' ? onOpenTujuan : service.action === 'video' ? onOpenVideoTutorial : service.action === 'emodul' ? onOpenEModul : undefined}
                   onKeyDown={service.action ? (event) => {
                     if (event.key === 'Enter' || event.key === ' ') {
                       event.preventDefault();
                       if (service.action === 'tujuan') onOpenTujuan();
                       if (service.action === 'video') onOpenVideoTutorial();
+                      if (service.action === 'emodul') onOpenEModul();
                     }
                   } : undefined}
                   role={service.action ? 'button' : undefined}
