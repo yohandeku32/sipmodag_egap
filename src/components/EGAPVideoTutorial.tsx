@@ -1,11 +1,9 @@
 import React from 'react';
 import {
   ArrowLeft,
-  ExternalLink,
   PlayCircle,
   Video,
   MonitorPlay,
-  CheckCircle2,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -25,8 +23,6 @@ const tutorials = [
       'Panduan video untuk membantu pengguna memahami proses penyusunan GAP secara lebih terarah dan mudah diikuti.',
     embedUrl:
       'https://drive.google.com/file/d/1tSV_mnPYZ4VYY2YsF0eM00bbUK9n8jtZ/preview?t=2.223',
-    viewUrl:
-      'https://drive.google.com/file/d/1tSV_mnPYZ4VYY2YsF0eM00bbUK9n8jtZ/view?t=2.223',
   },
   {
     number: '02',
@@ -35,8 +31,6 @@ const tutorials = [
       'Panduan penggunaan E-GAP Toolkit untuk membantu pengguna mengenali alur, menu, dan fungsi utama layanan E-GAP.',
     embedUrl:
       'https://drive.google.com/file/d/1SGTGdlQPfjYDdmnedz_Sa-2MZGNV6_Pu/preview',
-    viewUrl:
-      'https://drive.google.com/file/d/1SGTGdlQPfjYDdmnedz_Sa-2MZGNV6_Pu/view',
   },
 ];
 
@@ -123,7 +117,7 @@ export default function EGAPVideoTutorial({ onBack, onHome }: EGAPVideoTutorialP
             </div>
           </motion.section>
 
-          <section className="space-y-7">
+          <section className="mx-auto max-w-5xl space-y-7">
             {tutorials.map((tutorial, index) => (
               <motion.article
                 key={tutorial.title}
@@ -133,7 +127,7 @@ export default function EGAPVideoTutorial({ onBack, onHome }: EGAPVideoTutorialP
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm"
               >
-                <div className="grid grid-cols-1 lg:grid-cols-[1.35fr_0.65fr]">
+                <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.95fr)_minmax(280px,0.65fr)]">
                   <div className="bg-slate-950 p-2 sm:p-3">
                     <div className="relative aspect-video overflow-hidden rounded-[20px] bg-black">
                       <iframe
@@ -162,23 +156,7 @@ export default function EGAPVideoTutorial({ onBack, onHome }: EGAPVideoTutorialP
                         {tutorial.description}
                       </p>
 
-                      <div className="mt-6 flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4">
-                        <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
-                        <p className="text-xs leading-6 text-emerald-800">
-                          Video ditampilkan langsung dari Google Drive. Gunakan tombol layar penuh pada player untuk tampilan yang lebih besar.
-                        </p>
-                      </div>
                     </div>
-
-                    <a
-                      href={tutorial.viewUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-xs font-extrabold text-slate-700 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-800"
-                    >
-                      Buka di Google Drive
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
                   </div>
                 </div>
               </motion.article>
