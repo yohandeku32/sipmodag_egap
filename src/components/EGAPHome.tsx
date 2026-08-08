@@ -258,9 +258,9 @@ export default function EGAPHome({ onBack, onOpenTujuan, onOpenVideoTutorial, on
                   } : undefined}
                   role={service.action ? 'button' : undefined}
                   tabIndex={service.action ? 0 : undefined}
-                  className={`group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg ${service.action ? 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300' : ''}`}
+                  className={`group rounded-2xl border border-slate-300 bg-white p-6 shadow-md shadow-slate-200/60 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl hover:shadow-slate-300/50 ${service.action ? 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300' : ''}`}
                 >
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl border ${service.iconClass}`}>
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl border shadow-sm transition-transform duration-300 group-hover:-translate-y-0.5 ${service.iconClass}`}>
                     <Icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 text-lg font-black text-slate-900">{service.title}</h3>
