@@ -37,6 +37,7 @@ import OperatorLogin from './components/OperatorLogin';
 import OperatorDashboard from './components/OperatorDashboard';
 import EGAPHome from './components/EGAPHome';
 import EGAPTujuan from './components/EGAPTujuan';
+import EGAPVideoTutorial from './components/EGAPVideoTutorial';
 import { BudgetInput, OperatorSession, RevisionTarget } from './reviewTypes';
 
 // Masukkan URL Web App Google Apps Script Anda di bawah ini
@@ -474,7 +475,7 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showFAQ, setShowFAQ] = useState<boolean>(false);
-  type PublicPage = 'home' | 'egap' | 'egap-tujuan';
+  type PublicPage = 'home' | 'egap' | 'egap-tujuan' | 'egap-video';
 
   const getPublicPageFromLocation = (): PublicPage => {
     if (typeof window === 'undefined') return 'home';
@@ -486,6 +487,7 @@ export default function App() {
       : pathname;
 
     if (relativePath.startsWith('/egap/tujuan')) return 'egap-tujuan';
+    if (relativePath.startsWith('/egap/video-tutorial')) return 'egap-video';
     if (relativePath.startsWith('/egap')) return 'egap';
     return 'home';
   };
@@ -566,9 +568,11 @@ export default function App() {
     const basePath = import.meta.env.BASE_URL;
     const nextPath = page === 'egap-tujuan'
       ? `${basePath}egap/tujuan`
-      : page === 'egap'
-        ? `${basePath}egap`
-        : basePath;
+      : page === 'egap-video'
+        ? `${basePath}egap/video-tutorial`
+        : page === 'egap'
+          ? `${basePath}egap`
+          : basePath;
     setCurrentPublicPage(page);
 
     if (typeof window !== 'undefined' && window.location.pathname !== nextPath) {
@@ -1658,6 +1662,20 @@ export default function App() {
               onHome={() => navigatePublicPage('egap')}
             />
           </motion.div>
+        ) : currentPublicPage === 'egap-video' ? (
+          <motion.div
+            key="egap-video-page"
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -16 }}
+            transition={{ duration: 0.3 }}
+            className="flex-grow"
+          >
+            <EGAPVideoTutorial
+              onBack={() => navigatePublicPage('egap')}
+              onHome={() => navigatePublicPage('egap')}
+            />
+          </motion.div>
         ) : currentPublicPage === 'egap' ? (
           <motion.div
             key="egap-page"
@@ -1670,6 +1688,7 @@ export default function App() {
             <EGAPHome
               onBack={() => navigatePublicPage('home')}
               onOpenTujuan={() => navigatePublicPage('egap-tujuan')}
+              onOpenVideoTutorial={() => navigatePublicPage('egap-video')}
               onLoginOPD={() => {
                 navigatePublicPage('home');
                 setSelectedOPDToLogin(null);
