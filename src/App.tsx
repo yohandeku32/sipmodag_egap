@@ -473,10 +473,20 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showFAQ, setShowFAQ] = useState<boolean>(false);
+  const getPublicPageFromLocation = (): 'home' | 'egap' => {
+    if (typeof window === 'undefined') return 'home';
+
+    const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+    const pathname = window.location.pathname;
+    const relativePath = basePath && pathname.startsWith(basePath)
+      ? pathname.slice(basePath.length)
+      : pathname;
+
+    return relativePath.startsWith('/egap') ? 'egap' : 'home';
+  };
+
   const [currentPublicPage, setCurrentPublicPage] = useState<'home' | 'egap'>(() =>
-    typeof window !== 'undefined' && window.location.pathname.startsWith('/egap')
-      ? 'egap'
-      : 'home'
+    getPublicPageFromLocation()
   );
 
   // User authentication and document upload states
@@ -548,7 +558,8 @@ export default function App() {
   } | null>(null);
 
   const navigatePublicPage = (page: 'home' | 'egap') => {
-    const nextPath = page === 'egap' ? '/egap' : '/';
+    const basePath = import.meta.env.BASE_URL;
+    const nextPath = page === 'egap' ? `${basePath}egap` : basePath;
     setCurrentPublicPage(page);
 
     if (typeof window !== 'undefined' && window.location.pathname !== nextPath) {
@@ -562,9 +573,7 @@ export default function App() {
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPublicPage(
-        window.location.pathname.startsWith('/egap') ? 'egap' : 'home'
-      );
+      setCurrentPublicPage(getPublicPageFromLocation());
     };
 
     window.addEventListener('popstate', handlePopState);
