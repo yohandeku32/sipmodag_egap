@@ -36,6 +36,7 @@ import OPDDashboard from './components/OPDDashboard';
 import OperatorLogin from './components/OperatorLogin';
 import OperatorDashboard from './components/OperatorDashboard';
 import EGAPHome from './components/EGAPHome';
+import EGAPTujuan from './components/EGAPTujuan';
 import { BudgetInput, OperatorSession, RevisionTarget } from './reviewTypes';
 
 // Masukkan URL Web App Google Apps Script Anda di bawah ini
@@ -473,7 +474,9 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showFAQ, setShowFAQ] = useState<boolean>(false);
-  const getPublicPageFromLocation = (): 'home' | 'egap' => {
+  type PublicPage = 'home' | 'egap' | 'egap-tujuan';
+
+  const getPublicPageFromLocation = (): PublicPage => {
     if (typeof window === 'undefined') return 'home';
 
     const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -482,10 +485,12 @@ export default function App() {
       ? pathname.slice(basePath.length)
       : pathname;
 
-    return relativePath.startsWith('/egap') ? 'egap' : 'home';
+    if (relativePath.startsWith('/egap/tujuan')) return 'egap-tujuan';
+    if (relativePath.startsWith('/egap')) return 'egap';
+    return 'home';
   };
 
-  const [currentPublicPage, setCurrentPublicPage] = useState<'home' | 'egap'>(() =>
+  const [currentPublicPage, setCurrentPublicPage] = useState<PublicPage>(() =>
     getPublicPageFromLocation()
   );
 
@@ -557,9 +562,13 @@ export default function App() {
     confirmations: number;
   } | null>(null);
 
-  const navigatePublicPage = (page: 'home' | 'egap') => {
+  const navigatePublicPage = (page: PublicPage) => {
     const basePath = import.meta.env.BASE_URL;
-    const nextPath = page === 'egap' ? `${basePath}egap` : basePath;
+    const nextPath = page === 'egap-tujuan'
+      ? `${basePath}egap/tujuan`
+      : page === 'egap'
+        ? `${basePath}egap`
+        : basePath;
     setCurrentPublicPage(page);
 
     if (typeof window !== 'undefined' && window.location.pathname !== nextPath) {
@@ -1635,6 +1644,20 @@ export default function App() {
               }}
             />
           </motion.div>
+        ) : currentPublicPage === 'egap-tujuan' ? (
+          <motion.div
+            key="egap-tujuan-page"
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -16 }}
+            transition={{ duration: 0.3 }}
+            className="flex-grow"
+          >
+            <EGAPTujuan
+              onBack={() => navigatePublicPage('egap')}
+              onHome={() => navigatePublicPage('egap')}
+            />
+          </motion.div>
         ) : currentPublicPage === 'egap' ? (
           <motion.div
             key="egap-page"
@@ -1646,6 +1669,7 @@ export default function App() {
           >
             <EGAPHome
               onBack={() => navigatePublicPage('home')}
+              onOpenTujuan={() => navigatePublicPage('egap-tujuan')}
               onLoginOPD={() => {
                 navigatePublicPage('home');
                 setSelectedOPDToLogin(null);
