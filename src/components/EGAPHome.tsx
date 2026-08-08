@@ -24,6 +24,7 @@ const GOOGLE_SITE_URL = 'https://sites.google.com/view/e-gaptoolkit/beranda?auth
 
 type EGAPHomeProps = {
   onBack: () => void;
+  onOpenTujuan: () => void;
   onLoginOPD: () => void;
 };
 
@@ -34,6 +35,7 @@ const services = [
       'Memahami tujuan, manfaat, dan peran E-GAP dalam mendukung penyusunan dokumen analisis gender yang lebih terarah.',
     icon: Target,
     iconClass: 'bg-blue-50 text-blue-700 border-blue-100',
+    action: 'tujuan',
   },
   {
     title: 'Video Tutorial',
@@ -72,7 +74,7 @@ const services = [
   },
 ];
 
-export default function EGAPHome({ onBack, onLoginOPD }: EGAPHomeProps) {
+export default function EGAPHome({ onBack, onOpenTujuan, onLoginOPD }: EGAPHomeProps) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased">
       <div className="pointer-events-none fixed inset-0 z-0 bg-grid-pattern opacity-[0.28]" />
@@ -238,15 +240,24 @@ export default function EGAPHome({ onBack, onLoginOPD }: EGAPHomeProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.35, delay: index * 0.04 }}
-                  className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg"
+                  onClick={service.action === 'tujuan' ? onOpenTujuan : undefined}
+                  onKeyDown={service.action === 'tujuan' ? (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      onOpenTujuan();
+                    }
+                  } : undefined}
+                  role={service.action === 'tujuan' ? 'button' : undefined}
+                  tabIndex={service.action === 'tujuan' ? 0 : undefined}
+                  className={`group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg ${service.action === 'tujuan' ? 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300' : ''}`}
                 >
                   <div className={`flex h-12 w-12 items-center justify-center rounded-xl border ${service.iconClass}`}>
                     <Icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 text-lg font-black text-slate-900">{service.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-500">{service.description}</p>
-                  <div className="mt-5 flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-400">
-                    <span>Konten E-GAP</span>
+                  <div className={`mt-5 flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider ${service.action === 'tujuan' ? 'text-blue-700' : 'text-slate-400'}`}>
+                    <span>{service.action === 'tujuan' ? 'Buka halaman' : 'Konten E-GAP'}</span>
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                   </div>
                 </motion.article>
