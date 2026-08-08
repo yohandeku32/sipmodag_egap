@@ -32,7 +32,9 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        # package-lock lama SIPMODAG belum memuat dependency TiDB terbaru.
+        # Untuk GitHub Pages, install dari package.json agar build frontend tidak gagal.
+        run: npm install --no-package-lock --no-audit --no-fund
 
       - name: Build Vite app
         run: npm run build
