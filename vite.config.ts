@@ -4,8 +4,13 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
+  const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1];
+  const base = process.env.GITHUB_ACTIONS === 'true' && repositoryName
+    ? `/${repositoryName}/`
+    : '/';
+
   return {
-    base: '/sipmodag_egap/',
+    base,
 
     plugins: [
       react(),
