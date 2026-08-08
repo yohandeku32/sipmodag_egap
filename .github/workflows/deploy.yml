@@ -2,54 +2,62 @@ name: Deploy SIPMODAG E-GAP to GitHub Pages
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
       - name: Install dependencies
-        # package-lock lama SIPMODAG belum memuat dependency TiDB terbaru.
-        # Untuk GitHub Pages, install dari package.json agar build frontend tidak gagal.
         run: npm install --no-package-lock --no-audit --no-fund
 
       - name: Build Vite app
         run: npm run build
 
-      - name: Add SPA fallback for E-GAP routes
+      - name: Add SPA fallback
         run: cp dist/index.html dist/404.html
 
-      - name: Setup Pages
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
         with:
+          name: github-pages
           path: ./dist
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
