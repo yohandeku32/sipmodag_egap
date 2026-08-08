@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/egap", "destination": "/index.html" },
+    { "source": "/egap/:path*", "destination": "/index.html" }
+  ]
+}
